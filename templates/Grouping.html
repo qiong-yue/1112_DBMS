@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <title>Grouping</title>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+    </head>
+
+{% extends "layout.html" %}
+{% block title %}
+RUN團購 | Home
+{% endblock %}
+{% block content %}
+
+    <body>
+        <h1>Grouping</h1>
+        <form action="{{ url_for('addProduct') }}" method="POST">
+            <h3>Please Add Your product information:</h3>
+            <p>Name:<input type="text" name="name" /></p>
+
+            <p>Variety:<input type="text" name="variety" /></p>
+
+            <p>Origin:<input type="text" name="origin" /></p>
+
+            <p>On-sale:<input type="date" name="onSale" /></p>
+
+            <p>Off-sale:<input type="date" name="offSale" /></p>
+
+            <p>Price:<input type="text" name="price" /></p>
+
+            <p>Count:<input type="number" name="count" /></p>
+
+            <p><input type="submit" value="Submit" /></p>
+        </form>  
+    </body>
+</html>

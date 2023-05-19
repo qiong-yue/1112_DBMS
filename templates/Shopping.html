@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <title>Shopping</title>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+    </head>
+{% extends "layout.html" %}
+{% block title %}
+RUN團購 | Home
+{% endblock %}
+{% block content %}
+    <body>
+        <h1>Shopping</h1>
+        <h3>Please select the variety of product you need:</h3>
+        <div class="table-container">
+            <table border="1px">
+                <thead>
+                    <td><strong>Variety ID</strong></td>
+                    <td><strong>Variety</strong></td>
+                    <td><strong>Number of Products</strong></td>
+                    <td><strong>variety.html</strong></td>
+                </thead>
+
+                {% for row in rows %}
+                <tr>
+                    <td>{{ row["varietyid"] }}</td>
+                    <td>{{ row["vairety"] }}</td>
+                    <td>{{ row["numProducts"]}}</td>
+                    <td>{{ row["varietyHtml"]}}</td>
+            </table>
+        </div>
+
+    </body>
+</html>

@@ -1,34 +1,34 @@
-{% extends "shopping.html" %} 
+{% extends "Shopping.html" %} 
 {% block title %}
 List Food 
 {% endblock %} 
 {% block content %} 
-
+<h1> Food </h1>
         <table border="1px">
             <thead>
-                <td><strong>Name</strong></td>
-                <td><strong>Initiator</strong></td>
-                <td><strong>Origin</strong></td>
-                <td><strong>On sale</strong></td>
-                <td><strong>Off sale</strong></td>
-                <td><strong>Price</strong></td>
-                <td><strong>Count</strong></td>
-                <td></td>
-                <td></td>
+                <td><strong class = "item_name"> Name</strong></td>
+                <td><strong class = "item_origin"> Origin</strong></td>
+                <td><strong class = "item_saletime"> On sale</strong></td>
+                <td><strong class = "item_offtime"> Off sale</strong></td>
+                <td><strong class = "item_price"> Price</strong></td>
+                <td><strong class = "item_amount"> Amount</strong></td>
+                <td class = "item_buy" ></td>
             </thead>
 
             {% for row in rows %}
             <tr>
                 <td>{{ row["Name"] }}</td>
-                <td>{{ row["seller_id"] }}</td>
                 <td> {{ row["origin"]}}</td>
                 <td>{{ row["release_data"] }}</td>
                 <td>{{ row["off_date"] }}</td>
                 <td>{{ row["price"] }}</td>
                 <td>{{ row["amount"] }}</td>
-                <td><form action="{{url_for('edit')}}" method="POST"><input type="hidden" name="id" value="{{ row['rowid'] }}"><input type="submit" value="Edit"></form> </td>
-                <td><form onsubmit="return confirm('Are you sure you want to DELETE this Student from the Database?');" action="{{url_for('delete')}}" method="POST"><input type="hidden" name="id" value="{{ row['rowid'] }}"><input type="submit" value="Delete"></form> </td>
-            </tr>
+                <td class = "item_buy">
+                    <button>加入</button>
+                </td>
+
             {% endfor %}
         </table>
+        <button> 進入購物車 </button> <button> 返回Shopping頁面 </button>
+
 {% endblock %}

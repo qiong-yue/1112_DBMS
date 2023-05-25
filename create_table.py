@@ -10,6 +10,8 @@ conn.execute(
 conn.execute(
     "DROP TABLE product " )
 conn.execute(
+    "DROP TABLE orders " )
+conn.execute(
     'CREATE TABLE IF NOT EXISTS product(product_id INTEGER PRIMARY KEY ,seller_id INTEGER ,  name TEXT , type_id INTEGER , amount INTEGER ,release_date TEXT , off_date TEXT ,  price INTEGER , origin TEXT , rating REAL ) ')
 conn.execute(
     'CREATE TABLE IF NOT EXISTS user( user_id INTEGER PRIMARY KEY , username TEXT , address TEXT , phone TEXT , Bdate TEXT , email TEXT , password TEXT ) ' )
@@ -18,6 +20,8 @@ conn.execute(
 
 #conn.execute(
  #   "INSERT INTO user( user_id , username , address , phone , Bdate , email , password ) VALUES(?,?,?,?,?,?,?)" , ( 1 , 'cathy' , 'cheng hun' , '0989531768' ,  '2003-08-27' , 'cathy@gmail.com' , 'cathy0827' ))
+
+conn.execute('CREATE TABLE orders (order_id INTEGER PRIMARY KEY, date TEXT, product_id INTEGER, price INTEGER, amount INTEGER, coupon_status INTEGER, located_id INTEGER)')
 
 conn.commit()
 print("add seccessfully")

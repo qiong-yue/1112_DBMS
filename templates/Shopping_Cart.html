@@ -10,7 +10,7 @@ List Food
                 <td><strong class = "item_name"> Name</strong></td>
                 <td><strong class = "item_stores"> Stores</strong></td>
                 <td><strong class = "item_amount"> Amount</strong></td>
-                <td><strong class = "item_edit"> Edit </strong></td>
+                <td><strong class = "item_edit"> Edit</strong></td>
             </thead>
 
             {% for row in rows %}
@@ -18,15 +18,14 @@ List Food
                 <td>{{ row["Name"] }}</td>
                 <td>{{ row["Stores"] }}</td>
                 <td class = "item_amount">
-                    <button>+</button>
-                    row["amount"]
-                    <button>-</button>
+                    <input type = 'number' step = '1' min = '0' max = '20'/>
                 </td>
                 <td class = "item_edit">
-                    <button>delete</button>
+                    <button> Delete </button>
                 </td>
 
             {% endfor %}
         </table>
-        <button> 返回Shopping頁面 </button> 
+        <button> 返回Shopping頁面 </button>
+        <button> buy </button>  
 {% endblock %}

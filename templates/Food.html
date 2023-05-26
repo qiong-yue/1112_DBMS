@@ -20,22 +20,18 @@
         <table>
             <tr>
                 <th>Name</th>
-                <th>Origin</th>
-                <th>On sale</th>
-                <th>Off sale</th>
-                <th>Price</th>
-                <th>Amount</th>
+                <th>origin</th>
+                <th>price</th>
+                <th>amount</th>
                 <th>    </th>
             </tr>
             {% for product in products %}
                 <tr>
                     <td>{{ row["Name"] }}</td>
-                <td> {{ row["origin"]}}</td>
-                <td>{{ row["release_data"] }}</td>
-                <td>{{ row["off_date"] }}</td>
-                <td>{{ row["price"] }}</td>
-                <td>{{ row["amount"] }}</td>
-                <td> <button>加入</button> </td>
+                    <td> {{ row["origin"]}}</td>
+                    <td>{{ row["price"] }}</td>
+                    <td>{{ row["stores"] }}</td>
+                    <td> <button>加入</button> </td>
                 </tr>
             {% endfor %}
         </table>

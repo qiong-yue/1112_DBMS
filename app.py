@@ -423,3 +423,78 @@ login.login_message = 'You must login to access this page'
 login.login_message_category = 'info'
 
 from app.routes import *
+
+#雯 427 - 500
+#加table order 
+conn.execute(
+    "DROP TABLE order " )
+conn.execute(
+    'CREATE TABLE IF NOT EXISTS order(order_id INTEGER PRIMARY KEY , amount INTEGER ,date TEXT , product_id INTEGER ,  price INTEGER , coupon_status INTEGER ,locate_id INTEGER ) ')
+
+#前端連接資料庫 在food四分頁裡
+@app.route("/Shopping_Cart")
+def Shopping_Cart():
+    return  render_template("Shopping_Cart.html")
+
+#buy加到order裡，請浥改這個
+#itemArray = { row['product_id'] : {'name' : row['name'], 'amount' : _amount, 'price' : row['price'], 'total_price': _amount * row['price'],
+                                           #'coupon_status': row['coupon_status'], 'locate_id': row['locate_id']}}
+#coupon要留嗎
+@app.route("/buy")
+def buy(cart_items):
+    order_date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
+    # Connect to the SQLite3 DB and create a cursor
+    con = sqlite3.connect("DB.db")
+    cursor = con.cursor()
+    
+    for product_id, item in cart_items.items():
+        order_id=None
+        name = item['name']
+        amount = item['amount']
+        price = item['price']
+        total_price = item['total_price']
+        coupon_status = item['coupon_status']
+        locate_id = item['locate_id']
+        
+        # Insert the item into the order table
+        cursor.execute('INSERT INTO orders (order_id,date, product_id, name, price, amount, total_price, coupon_status, locate_id) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?)',
+                       (order_id,order_date, product_id, name, price, amount, total_price, coupon_status, locate_id))
+    
+    # Commit the changes and close the connection
+    con.commit()
+    con.close()
+
+# 刪除購物車商品(一次一個)
+@app.route('/delete')
+def delete_product(product_id):
+    try:
+        all_total_price = 0
+        all_total_quantity = 0
+        session.modified = True
+        
+        for item in session['cart_item'].items():
+            if item[0] == product_id:    
+                session['cart_item'].pop(item[0], None)
+                if 'cart_item' in session:
+                    for key, value in session['cart_item'].items():
+                        individual_quantity = int(session['cart_item'][key]['quantity'])
+                        individual_price = float(session['cart_item'][key]['total_price'])
+                        all_total_quantity = all_total_quantity + individual_quantity
+                        all_total_price = all_total_price + individual_price
+                break
+        
+        if all_total_quantity == 0:
+            session.clear()
+        else:
+            session['all_total_quantity'] = all_total_quantity
+            session['all_total_price'] = all_total_price
+            
+        return redirect(url_for('.products'))
+    except Exception as e:
+        print(e)
+
+#按shopping回到shopping.html編輯
+@app.route("/Shopping")
+def Shopping():
+    return render_template("Shopping.html")

@@ -1,8 +1,24 @@
 import flask
-from flask import Flask
+from flask import Flask, flash, redirect, url_for, request
 from flask import render_template
 from flask import request
-import sqlite3
+from flask_login import UserMixin, LoginManager
+from app import db, login
+from flask_wtf import FlaskForm, RecaptchaField
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from app.models import User
+import wtforms, sqlite3
+from flask_login import login_user, login_required, current_user, logout_user
+from app import app, bcrypt, db
+from app.forms import RegisterForm, LoginForm
+from flask_bootstrap import Bootstrap
+from flask_bcrypt import Bcrypt
+from flask_sqlalchemy import SQLAlchemy
+
+from config import Config
+
+
 
 app = Flask(__name__)
 
@@ -279,3 +295,131 @@ def delete_product(product_id):
         return redirect(url_for('.products'))
     except Exception as e:
         print(e)
+
+
+# 黃思：300~423
+# 按下register，輸入data到member table，return login.html
+@app.route("/addmember", methods=["POST", "GET"])
+def addmember():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user_id = form.user_id.data
+        fname = form.fname.data
+        email = form.email.data
+        pwd = bcrypt.generate_password_hash(form.pwd.data)
+        bdate = request.form['bdate']
+        phone = request.form['phone']
+        adr = request.form['adr'] 
+        user=User(user_id = user_id, username = fname, address = adr, phone=phone, Bdate=bdate, email=email, password=pwd)
+        app.db.session.add(user)
+        app.db.session.commit()
+        flash('Congrates, registration success', category='success')    
+        return redirect(url_for('index'))
+    return render_template("Log_In.html", form=form)
+
+# model.py
+@login.user_loader
+def load_user(user_id):
+    return User.query.filter_by(user_id=user_id).first()
+
+class User(db.Model, UserMixin):
+    user_id = db.Column(db.Integer, primary_key=True)
+    fname = db.Column(db.String(20), nullable=False)
+    adr = db.Column(db.String(30), nullable=False)
+    phone = db.Column(db.String(10), nullable=False)
+    bdate = db.Column(db.String(10), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    pwd = db.Column(db.String(20), nullable=False)
+
+    def __repr__(self):
+        return '<User %r>' % self.email
+
+# form.py
+wtforms.BooleanField
+
+class RegisterForm(FlaskForm):
+    fname = StringField('Name', validators=[DataRequired(), Length(min=4, max=20)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    pwd = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=20)])
+    bdate = StringField('Birth Date', validators=[DataRequired()])
+    phone = StringField('Cellphone', validators=[DataRequired(), Length(10)])
+    adr = StringField('Address(Country)', validators=[DataRequired(), Length(min=4, max=30)])
+    recaptcha = RecaptchaField()
+    submit = SubmitField('Register')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user:
+            raise ValidationError('Email already token, please choose another one. ')
+class LoginForm(FlaskForm):
+    email = StringField('Email:', validators=[DataRequired(), Email()])
+    pwd = PasswordField('Password:', validators=[DataRequired(), Length(min=8, max=20)])
+    submit = SubmitField('Submit')
+
+#route.py
+@app.route("/")
+@login_required
+def home():
+    return render_template("home.html")
+
+@app.route("/Register", methods=["POST", "GET"])
+def Register():
+    if current_user.is_authentiated:
+        return redirect(url_for('home'))
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user_id = form.user_id.data
+        fname = form.fname.data
+        email = form.email.data
+        pwd = bcrypt.generate_password_hash(form.pwd.data)
+        bdate = form.bdate.data
+        phone = form.phone.data
+        adr = form.adr.data 
+        user=User(user_id = user_id, fname = fname, adr = adr, phone=phone, bdate=bdate, email=email, pwd=pwd)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congrates, registration success', category='success')    
+        return redirect(url_for('home'))
+    return render_template("Register.html", form=form)
+
+@app.route("/login", methods=["POST", "GET"])
+def login():
+    if current_user.is_authentiated:
+        return redirect(url_for('home'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        pwd = form.pwd.data
+        remember = form.remember.data
+        # Check if pwd is matched
+        user = User.query.filter_by(email=email).first()
+        if user and bcrypt.check_password_hash(user.pwd, pwd):
+            #user exists and pwd matched
+            login_user(user, remember=remember)
+            flash('Login success', category='info')
+            if request.args.get('next'):
+                next_page = request.args.get('next')
+                return redirect(url_for(next_page))
+            return redirect(url_for('home'))
+        flash('User not exists or password not matched', category='danger')
+    return render_template("Log_in.html", form=form)
+
+@app.route('logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
+
+#__init__.py
+app = Flask(__name__)
+app.config.from_object(Config)
+
+bootstrap = Bootstrap(app)
+db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
+login = LoginManager(app)
+login.login_view = 'login'
+login.login_message = 'You must login to access this page'
+login.login_message_category = 'info'
+
+from app.routes import *

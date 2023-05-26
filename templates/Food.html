@@ -1,34 +1,46 @@
-{% extends "Shopping.html" %} 
-{% block title %}
-List Food 
-{% endblock %} 
-{% block content %} 
-<h1> Food </h1>
-        <table border="1px">
-            <thead>
-                <td><strong class = "item_name"> Name</strong></td>
-                <td><strong class = "item_origin"> Origin</strong></td>
-                <td><strong class = "item_saletime"> On sale</strong></td>
-                <td><strong class = "item_offtime"> Off sale</strong></td>
-                <td><strong class = "item_price"> Price</strong></td>
-                <td><strong class = "item_amount"> Amount</strong></td>
-                <td class = "item_buy" ></td>
-            </thead>
-
-            {% for row in rows %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Food</title>
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            th, td {
+                padding: 8px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Product List</h1>
+        <table>
             <tr>
-                <td>{{ row["Name"] }}</td>
+                <th>Name</th>
+                <th>Origin</th>
+                <th>On sale</th>
+                <th>Off sale</th>
+                <th>Price</th>
+                <th>Amount</th>
+                <th>    </th>
+            </tr>
+            {% for product in products %}
+                <tr>
+                    <td>{{ row["Name"] }}</td>
                 <td> {{ row["origin"]}}</td>
                 <td>{{ row["release_data"] }}</td>
                 <td>{{ row["off_date"] }}</td>
                 <td>{{ row["price"] }}</td>
                 <td>{{ row["amount"] }}</td>
-                <td class = "item_buy">
-                    <button>加入</button>
-                </td>
-
+                <td> <button>加入</button> </td>
+                </tr>
             {% endfor %}
         </table>
         <button> 進入購物車 </button> <button> 返回Shopping頁面 </button>
 
-{% endblock %}
+    </body>
+    </html>
+</html>

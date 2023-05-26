@@ -1,31 +1,44 @@
-{% extends "shopping.html" %} 
-{% block title %}
-List Food 
-{% endblock %} 
-{% block content %}
-
-<h1>Shopping Cart</h1> 
-        <table border="1px">
-            <thead>
-                <td><strong class = "item_name"> Name</strong></td>
-                <td><strong class = "item_stores"> Stores</strong></td>
-                <td><strong class = "item_amount"> Amount</strong></td>
-                <td><strong class = "item_edit"> Edit</strong></td>
-            </thead>
-
-            {% for row in rows %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping Cart</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .total {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Shopping Cart</h1>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Stores</th>
+            <th>Amount</th>
+            <th>Edit</th>
+        </tr>
+        {% for item in cart %}
             <tr>
                 <td>{{ row["Name"] }}</td>
                 <td>{{ row["Stores"] }}</td>
-                <td class = "item_amount">
-                    <input type = 'number' step = '1' min = '0' max = '20'/>
+                <td>
+                    <input type = 'number' step = '1' min = '0' max = '20'/> 
                 </td>
-                <td class = "item_edit">
+                <td>
                     <button> Delete </button>
                 </td>
-
-            {% endfor %}
-        </table>
-        <button> 返回Shopping頁面 </button>
-        <button> buy </button>  
-{% endblock %}
+            </tr>
+        {% endfor %}>
+    </table>
+</body>
+</html>

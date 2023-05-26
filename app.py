@@ -23,7 +23,7 @@ from config import Config
 app = Flask(__name__)
 
 
-#江 10-30
+#江 28-48
 
 @app.route("/login")
 def login():
@@ -47,7 +47,7 @@ def addmember():
     return render_template("Log_In.html")
 
 
-#許 34-116
+#許 50-133
 #可以選要開團or購物
 @app.route("/home")
 def home():
@@ -131,7 +131,7 @@ def concern():
             con.close()
             return render_template('result.html' , msg = msg )
 
-#浥118-281
+#浥134-299
 # 總商品頁（四大項目）
 @app.route("/product")
 def product():

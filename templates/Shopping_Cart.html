@@ -23,14 +23,14 @@
     <table>
         <tr>
             <th>Name</th>
-            <th>Stores</th>
+            <th>Seller_id</th>
             <th>Amount</th>
             <th>Edit</th>
         </tr>
         {% for item in cart %}
             <tr>
                 <td>{{ row["Name"] }}</td>
-                <td>{{ row["Stores"] }}</td>
+                <td>{{ row["seller_id"] }}</td>
                 <td>
                     <input type = 'number' step = '1' min = '0' max = '20'/> 
                 </td>

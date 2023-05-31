@@ -23,6 +23,12 @@ conn.execute(
 
 conn.execute('CREATE TABLE orders (order_id INTEGER PRIMARY KEY, date TEXT, product_id INTEGER, price INTEGER, amount INTEGER, coupon_status INTEGER, located_id INTEGER)')
 
+#加table order
+conn.execute(
+    "DROP TABLE order " )
+conn.execute(
+    'CREATE TABLE IF NOT EXISTS order(order_id INTEGER PRIMARY KEY , amount INTEGER ,date TEXT , product_id INTEGER ,  price INTEGER , coupon_status INTEGER ,locate_id INTEGER ) ')
+
 conn.commit()
 print("add seccessfully")
 

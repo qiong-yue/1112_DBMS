@@ -18,6 +18,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 from config import Config
 
+import sqlite3
+import datetime
 
 
 app = Flask(__name__)
@@ -425,12 +427,6 @@ login.login_message_category = 'info'
 from app.routes import *
 
 #雯 427 - 500
-#加table order 
-conn.execute(
-    "DROP TABLE order " )
-conn.execute(
-    'CREATE TABLE IF NOT EXISTS order(order_id INTEGER PRIMARY KEY , amount INTEGER ,date TEXT , product_id INTEGER ,  price INTEGER , coupon_status INTEGER ,locate_id INTEGER ) ')
-
 #前端連接資料庫 在food四分頁裡
 @app.route("/Shopping_Cart")
 def Shopping_Cart():

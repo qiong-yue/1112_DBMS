@@ -8,12 +8,12 @@ app = Flask(__name__)
 #起始點(登入)
 @app.route("/")
 def log_in():   
-    return render_template("log_in.html") 
+    return render_template("Log_in.html") 
 
 #可以選要開團or購物
 @app.route("/home")
 def home():
-    return render_template("home.html")
+    return render_template("Home.html")
 
 #修改會員資料頁面( like edit in video ))
 #輸入修改的資料
@@ -22,7 +22,7 @@ def member_profile():
     if request.method == 'POST' :
         try:
             email = request.form['email']   #找到要修改的email
-            con = sqlite3.connect('DB.db')
+            con = sqlite3.connect('database.db')
             #con.row_factory = sqlite3.Row
 
             cur = con.cursor()
@@ -33,7 +33,7 @@ def member_profile():
             email = None 
         finally:
             con.close()
-            return render_template("profile.html") #改網址名
+            return render_template("Member_Profile.html") #改網址名
 
 #編輯的畫面(編輯頁)( like editrec )
 #會員可修改畫面會跑出修改成功的畫面

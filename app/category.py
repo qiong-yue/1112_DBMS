@@ -7,13 +7,13 @@ app = Flask(__name__)
 # 總商品頁（四大項目）
 @app.route("/product")
 def product():
-    return render_template("product.html")
+    return render_template("Shopping.html")
 
 # type_id = 1, food
 @app.route('/product/food')
 def food():
     # Connect to the SQLite3 DB and 
-    con = sqlite3.connect("DB.db")
+    con = sqlite3.connect("database.db")
     con.row_factory = sqlite3.Row
 
     # 選擇種類為food的商品
@@ -23,13 +23,13 @@ def food():
     rows = cur.fetchall()
     con.close()
 
-    return render_template("food.html",rows=rows)
+    return render_template("Food.html",rows=rows)
 
 # type_id = 2, clothes
 @app.route('/product/clothes')
 def clothes():
     # Connect to the SQLite3 DB and 
-    con = sqlite3.connect("DB.db")
+    con = sqlite3.connect("database.db")
     con.row_factory = sqlite3.Row
 
     # 選擇種類為clothes的商品
@@ -39,13 +39,13 @@ def clothes():
     rows = cur.fetchall()
     con.close()
 
-    return render_template("clothes.html",rows=rows)
+    return render_template("Clothes.html",rows=rows)
 
 # type_id = 3, appliance
 @app.route('/product/foapplianceod')
 def appliance():
     # Connect to the SQLite3 DB 
-    con = sqlite3.connect("DB.db")
+    con = sqlite3.connect("database.db")
     con.row_factory = sqlite3.Row
 
     # 選擇種類為appliance的商品
@@ -55,13 +55,13 @@ def appliance():
     rows = cur.fetchall()
     con.close()
 
-    return render_template("appliance.html",rows=rows)
+    return render_template("Appliance.html",rows=rows)
 
 # type_id = 4, others
 @app.route('/product/others')
 def others():
     # Connect to the SQLite3 DB and 
-    con = sqlite3.connect("DB.db")
+    con = sqlite3.connect("database.db")
     con.row_factory = sqlite3.Row
 
     # 選擇種類為others的商品
@@ -71,13 +71,13 @@ def others():
     rows = cur.fetchall()
     con.close()
 
-    return render_template("others.html",rows=rows)
+    return render_template("Others.html",rows=rows)
 
 
 # 按 concern，回傳 shoppingCart
 @app.route("/shoppingCart")
 def shoppingCart():
-    return render_template("shoppingCart.html")
+    return render_template("ShoppingCart.html")
 
 # 將商品加入購物車
 @app.route('/add', methods=['POST'])
@@ -88,7 +88,7 @@ def add_product_to_cart():
     if _amount and product_id and request.method == 'POST':
 
         # Connect to the SQLite3 DB and 
-        con = sqlite3.connect("DB.db")
+        con = sqlite3.connect("database.db")
         con.row_factory = sqlite3.Row
         cursor = con.cursor()
 

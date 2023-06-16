@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> Shopping_cart </title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
+        <div class="container">
+            <div class="row">
+                <p><h1>Shopping Cart</h1></p>
+                <div class="col-sm-12">
+                {% if 'cart_item' in session %}
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Seller_ID</th>
+                                <th>Amount</th>
+                                <th>Edit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        
+             {% for key, value in session['cart_item'].items() %}
+                {% set amount = session['cart_item'][key]['amount'] %}
+                {% set price = session['cart_item'][key]['price'] %}
+                            <tr>
+                                <td class="col-sm-3 col-md-3 text-center"><strong>${{ Name }} </strong></td>
+                                <td class="col-sm-3 col-md-3 text-center"><strong>${{ seller_id }} </strong></td>
+                                <td calss="col-sm-3 col-md-3"> <input type = 'number' step = '1' min = '0' max = '20'/> </td>
+                                <td class="col-sm-3 col-md-3">
+                                    <a href="{{ url_for('.delete_product', product_id=session['cart_item'][key]['product_id']) }}" class="btn btn-danger">
+                                        Delete
+                                    </a>
+                                </td>          
+                            </tr>
+                {% endfor %}
+                            <tr>
+                                <td>
+                                <button type="button" class="btn btn-success" btn-lg>
+                                    Buy
+                                </button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+    
+             {% endif: %}
+                </div>
+            </div>
+        </div> 
+      
+</body>
+</html>
+

@@ -1,34 +1,47 @@
-<html>
+<html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=, initial-scale=1.0">
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+        <!-- MDB -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet"/>
         <title>Grouping</title>
-        <link rel="stylesheet" type="text/css" href="styles.css">
     </head>
-
-{% extends "layout.html" %}
-{% block title %}
-RUN團購 | Home
-{% endblock %}
-{% block content %}
-
     <body>
-        <h1>Grouping</h1>
-        <form action="{{ url_for('addProduct') }}" method="POST">
-            <h3>Please Add Your product information:</h3>
-            <p>Name:<input type="text" name="name" /></p>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{{url_for('home')}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-house-fill" viewBox="0 0 16 16">
+                        <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"/>
+                        <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6Z"/>
+                    </svg>
+                </a>
+                <h1><strong>五星好蘋</strong></h1>
+                <a href="{{url_for('logout')}}" class="btn btn-primary">Logout</a>
+            </div>
+        </nav>
+        <span style="text-align: center;">
+            <br><div class="shadow-inner" style="width:30%;margin: auto;"><h1 class="display-1">Grouping</h1></div><br>
+            <form action="{{ url_for('grouping') }}" method="POST">
+                <h3><strong>請輸入您的商品資料：</strong></h3><br>
+                <p>商品名稱：<input type="text" name="name" /></p>
 
-            <p>Variety:<input type="text" name="variety" /></p>
+                <p>商品種類：<input type="text" name="variety" /></p>
 
-            <p>Origin:<input type="text" name="origin" /></p>
+                <p>商品來源：<input type="text" name="origin" /></p>
 
-            <p>On-sale:<input type="date" name="onSale" /></p>
+                <p>商品價格：<input type="text" name="price" /></p>
 
-            <p>Off-sale:<input type="date" name="offSale" /></p>
+                <p>商品數量：<input type="number" name="amount" /></p>
 
-            <p>Price:<input type="text" name="price" /></p>
+                <p>您的信箱：<input type="text" name="email" /></p>
 
-            <p>Count:<input type="number" name="count" /></p>
-
-            <p><input type="submit" value="Submit" /></p>
-        </form>  
+                <br><p><button type="submit" value="grouping" class="btn btn-primary">Submit</button></p>
+            </form>
+        </span>
     </body>
 </html>

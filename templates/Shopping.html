@@ -1,33 +1,58 @@
 <html>
     <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=, initial-scale=1.0">
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+        <!-- MDB -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet"/>
         <title>Shopping</title>
-        <link rel="stylesheet" type="text/css" href="styles.css">
     </head>
-{% extends "layout.html" %}
-{% block title %}
-RUN團購 | Home
-{% endblock %}
-{% block content %}
     <body>
-        <h1>Shopping</h1>
-        <h3>Please select the variety of product you need:</h3>
-        <div class="table-container">
-            <table border="1px">
-                <thead>
-                    <td><strong>Variety ID</strong></td>
-                    <td><strong>Variety</strong></td>
-                    <td><strong>Number of Products</strong></td>
-                    <td><strong>variety.html</strong></td>
-                </thead>
-
-                {% for row in rows %}
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{{url_for('home')}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-house-fill" viewBox="0 0 16 16">
+                        <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"/>
+                        <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6Z"/>
+                    </svg>
+                </a>
+                <h1><strong>五星好蘋</strong></h1>
+                <a href="{{url_for('logout')}}" class="btn btn-primary">Logout</a>
+            </div>
+        </nav>
+        <span style="text-align: center;">
+        <br><div class="shadow-inner" style="width:30%;margin: auto;"><h1 class="display-1">Shopping</h1></div><br>
+        <h3><strong>選擇你需要的商品種類：</strong></h3>
+        <table class="table table-striped table-bordered" style="width: 400px; margin: auto;">
+            <thead>
                 <tr>
-                    <td>{{ row["varietyid"] }}</td>
-                    <td>{{ row["vairety"] }}</td>
-                    <td>{{ row["numProducts"]}}</td>
-                    <td>{{ row["varietyHtml"]}}</td>
+                <th scope="col">種類名稱</th>
+                <th scope="col">網址</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                <td>food</td>
+                <td><a href="{{url_for('food')}}" class="btn btn-info">Food</a></td>
+                </tr>
+                <tr>
+                <td>costmetic</td>
+                <td><a href="{{url_for('costmetic')}}" class="btn btn-info">Costmetic</a></td>
+                </tr>
+                <tr>
+                <td>clothes</td>
+                <td><a href="{{url_for('clothes')}}" class="btn btn-info">Clothes</a></td>
+                </tr>
+                <tr>
+                <td>Other</td>
+                <td><a href="{{url_for('others')}}" class="btn btn-info">Other</a></td>
+                </tr>
+            </tbody>
             </table>
-        </div>
-
+        </span>
     </body>
 </html>

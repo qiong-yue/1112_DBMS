@@ -17,42 +17,51 @@
             <div class="row">
                 <p><h1>Shopping Cart</h1></p>
                 <div class="col-sm-12">
-                {% if 'cart_item' in session %}
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Seller_ID</th>
+                                <th>Product_Name</th>
+                                <th>Price</th>
                                 <th>Amount</th>
                                 <th>Edit</th>
                             </tr>
                         </thead>
-                        <tbody>
                         
-             {% for key, value in session['cart_item'].items() %}
-                {% set amount = session['cart_item'][key]['amount'] %}
-                {% set price = session['cart_item'][key]['price'] %}
+                        <tbody>
+                         {% if 'cart_item' in session %}
+                         {% for key, value in session['cart_item'].items() %}
+                         {% set product_name = session['cart_item'][key]['name'] %}
+                         {% set price = session['cart_item'][key]['price'] %} 
                             <tr>
-                                <td class="col-sm-3 col-md-3 text-center"><strong>${{ Name }} </strong></td>
-                                <td class="col-sm-3 col-md-3 text-center"><strong>${{ seller_id }} </strong></td>
+                                <td class="col-sm-3 col-md-3 text-center"><strong>{{ product_name }} </strong></td>
+                                <td class="col-sm-3 col-md-3 text-center"><strong>{{ price }} </strong></td>
                                 <td calss="col-sm-3 col-md-3"> <input type = 'number' step = '1' min = '0' max = '20'/> </td>
                                 <td class="col-sm-3 col-md-3">
-                                    <a href="{{ url_for('.delete_product', product_id=session['cart_item'][key]['product_id']) }}" class="btn btn-danger">
-                                        Delete
-                                    </a>
+                                    <!-- <form href="{{ url_for('.delete_product', code=session['cart_item'][key]['code']) }}" method = "POST">
+                                        <button type="submit" class="btn btn-danger"> Delete </button>        
+                                    </form> -->
+                                    <form action="/delete" method="POST">
+                                        <input type="hidden" name="product_id" value="{{ product_id }}">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
                                 </td>          
                             </tr>
-                {% endfor %}
+                        {% endfor %}
+                        {% endif %}
                             <tr>
-                                <td>
-                                <button type="button" class="btn btn-success" btn-lg>
-                                    Buy
-                                </button></td>
+                                <td class="col-4">
+                                    <form action="{{ url_for('add_product_to_cart') }}">
+                                        <button type="submit" class="btn btn-info"> Buy </button>
+                                    </form>
+                                </td> 
+                                <td class="col-4">
+                                    <form action="{{ url_for('product') }}">
+                                        <button type="submit" class="btn btn-secondary"> 回到主畫面 </button>
+                                    </form>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
-    
-             {% endif: %}
                 </div>
             </div>
         </div> 

@@ -12,7 +12,7 @@ def product():
 # type_id = 1, food
 @app.route('/product/food')
 def food():
-    # Connect to the SQLite3 DB and 
+    # Connect to the SQLite3 DB and
     con = sqlite3.connect("database.db")
     con.row_factory = sqlite3.Row
 
@@ -28,7 +28,7 @@ def food():
 # type_id = 2, clothes
 @app.route('/product/clothes')
 def clothes():
-    # Connect to the SQLite3 DB and 
+    # Connect to the SQLite3 DB and
     con = sqlite3.connect("database.db")
     con.row_factory = sqlite3.Row
 
@@ -44,7 +44,7 @@ def clothes():
 # type_id = 3, appliance
 @app.route('/product/foapplianceod')
 def appliance():
-    # Connect to the SQLite3 DB 
+    # Connect to the SQLite3 DB
     con = sqlite3.connect("database.db")
     con.row_factory = sqlite3.Row
 
@@ -60,7 +60,7 @@ def appliance():
 # type_id = 4, others
 @app.route('/product/others')
 def others():
-    # Connect to the SQLite3 DB and 
+    # Connect to the SQLite3 DB and
     con = sqlite3.connect("database.db")
     con.row_factory = sqlite3.Row
 
@@ -82,25 +82,25 @@ def shoppingCart():
 # 將商品加入購物車
 @app.route('/add', methods=['POST'])
 def add_product_to_cart():
-    _amount = int(request.form['amount'])
-    product_id = request.form['product_id']
+    _amount = 1
+    product_id = int (request.form['product_id'])
     # validate the received values
     if _amount and product_id and request.method == 'POST':
 
-        # Connect to the SQLite3 DB and 
+        # Connect to the SQLite3 DB and
         con = sqlite3.connect("database.db")
         con.row_factory = sqlite3.Row
         cursor = con.cursor()
 
-        cursor.execute('SELECT * FROM product WHERE product_id = %d', (product_id,))
+        cursor.execute("SELECT * FROM Product WHERE product_id = ?", (product_id,))
 
         row = cursor.fetchone()
         con.close()
-        itemArray = { row['product_id'] : {'name' : row['name'], 'amount' : _amount, 'price' : row['price'], 'total_price': _amount * row['price']}}
-
+        itemArray = {str(row['product_id']): {'name': row['product_name'],'amount': int(_amount),'price': float(row['price'])}}
+        # itemArray = { int(row['product_id']) : {'name' : row['product_name'], 'amount' : _amount, 'price': row['price']}}
         all_total_price = 0
         all_total_amount = 0
-                
+
         session.modified = True
         if 'cart_item' in session:
             if row['product_id'] in session['cart_item']:
@@ -109,24 +109,24 @@ def add_product_to_cart():
                         old_amount = session['cart_item'][key]['amount']
                         total_amount = old_amount + _amount
                         session['cart_item'][key]['amount'] = total_amount
-                        session['cart_item'][key]['total_price'] = total_amount * row['price']
+                        # session['cart_item'][key]['total_price'] = total_amount * row['price']
             else:
                 session['cart_item'] = array_merge(session['cart_item'], itemArray)
-        
+
             for key, value in session['cart_item'].items():
                 individual_amount = int(session['cart_item'][key]['amount'])
-                individual_price = float(session['cart_item'][key]['total_price'])
+                # individual_price = float(session['cart_item'][key]['total_price'])
                 all_total_amount = all_total_amount + individual_amount
-                all_total_price = all_total_price + individual_price
+                # all_total_price = all_total_price + individual_price
         else:
             session['cart_item'] = itemArray
             all_total_amount = all_total_amount + _amount
-            all_total_price = all_total_price + _amount * row['price']
-            
+            # all_total_price = all_total_price + _amount * row['price']
+
         session['all_total_amount'] = all_total_amount
-        session['all_total_price'] = all_total_price
-                
-        return redirect(url_for('products'))
+        # session['all_total_price'] = all_total_price
+
+        return redirect(url_for('food'))
     else:
         return 'Error while adding item to cart'
 
@@ -138,33 +138,35 @@ def array_merge( first_array , second_array ):
     elif isinstance( first_array , set ) and isinstance( second_array , set ):
         return first_array.union( second_array )
     return False
-'''
+
+
+
 # 刪除購物車的物品
-@app.route('/delete')
-def delete_product(product_id):
+@app.route('/delete' , methods=['POST'])
+def delete_product():
     try:
         all_total_price = 0
         all_total_quantity = 0
         session.modified = True
-        
+
+        product_id = request.form.get('product_id')
         for item in session['cart_item'].items():
-            if item[0] == product_id:    
+            if item[0] == product_id:
                 session['cart_item'].pop(item[0], None)
                 if 'cart_item' in session:
                     for key, value in session['cart_item'].items():
-                        individual_quantity = int(session['cart_item'][key]['quantity'])
+                        individual_quantity = int(session['cart_item'][key]['amount'])
                         individual_price = float(session['cart_item'][key]['total_price'])
                         all_total_quantity = all_total_quantity + individual_quantity
                         all_total_price = all_total_price + individual_price
                 break
-        
+
         if all_total_quantity == 0:
             session.clear()
         else:
             session['all_total_quantity'] = all_total_quantity
             session['all_total_price'] = all_total_price
-            
-        return redirect(url_for('.products'))
+
+        return redirect(url_for('.shoppingCart'))
     except Exception as e:
         print(e)
-'''

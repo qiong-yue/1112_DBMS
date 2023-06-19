@@ -5,7 +5,7 @@ from app import app
 con = sqlite3.connect("database.db", check_same_thread=False)
 
 #在要開團的畫面要輸入新商品的資料
-@app.route("/grouping", methods=['POST','GET'])
+@app.route('/grouping' , methods=['POST','GET'])
 def grouping():
     if request.method == 'POST' :
         try:
@@ -14,22 +14,26 @@ def grouping():
             amount = request.form['amount'] #數量
             price = request.form['price'] #價錢
             origin = request.form['origin'] #產地 
-            seller_email = request.form['email'] #會員信箱
-            with sqlite3.connect('database.db') as con :
-                cur = con.cursor()
-                cur.execute(  #加入新商品資訊 
-                    """
-                    INSERT INTO product 
-                        ( seller_email, product_name, type_id, store, price, origin ) 
-                    VALUE
+            seller_email = request.form['email'] #會員信箱        
+            con.row_factory = sqlite3.Row
+            cur = con.cursor()
+            cur.execute("select * from User where email=?" , ( seller_email , ))  #先確認是否db有這個email會員
+            result = cur.fetchone()
+            if result : #如果有 
+                cur.execute( """    
+                    INSERT INTO Product ( 
+                        seller_email, product_name, type_id, store, price, origin ) 
+                    VALUES
                         ( ?, ?, ?, ?, ?, ? ) 
-                    """, 
-                    ( seller_email , nm , t_id , amount , price , origin )) 
+                    """, ( seller_email , nm , t_id , amount , price , origin )) 
                 con.commit()
-                flash('Grouping  Success!') #利用 flash 顯示 開團成功 
-        except:
-            con.rollback()
-            flash('Grouping  ERROR !') #利用 flash 顯示 開團失敗 
+                # flash('Grouping  Success!') #利用 flash 顯示 開團成功 
+            else:
+                print( "nothing ")
+                return "ERROR!! Try again !! "  
+            #con.close()
+        except :
+            return "ERROR IN Email " 
         finally:
-            con.close()
-    return render_template("Grouping.html") #大寫 
+            return redirect( url_for("grouping"))
+    return render_template("Grouping.html") 

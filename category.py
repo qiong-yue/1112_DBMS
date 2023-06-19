@@ -1,5 +1,5 @@
 #浥 在四個種類的團購畫面加入團購商品到Shopping_Cart
-from flask import Flask, request, render_template, redirect, url_for, session
+from flask import Flask, request, render_template, redirect, url_for, session, make_response
 import sqlite3
 from app import app
 
@@ -8,12 +8,6 @@ from app import app
 @app.route("/product")
 def product():
     return render_template("Shopping.html")
-
-# 按 concern，回傳 shoppingCart
-@app.route("/shoppingCart")
-def shoppingCart():
-    return render_template("ShoppingCart.html")
-
 
 # type_id = 1, food
 @app.route('/product/food')
@@ -79,6 +73,12 @@ def others():
 
     return render_template("Others.html",rows=rows)
 
+
+# 按 concern，回傳 shoppingCart
+@app.route("/shoppingCart")
+def shoppingCart():
+    return render_template("ShoppingCart.html")
+
 # 將商品加入購物車
 @app.route('/add', methods=['POST'])
 def add_product_to_cart():
@@ -98,7 +98,7 @@ def add_product_to_cart():
         con.close()
         itemArray = {str(row['product_id']): {'product_id': row['product_id'],'name': row['product_name'],'amount': int(_amount),'price': float(row['price'])}}
         # itemArray = { int(row['product_id']) : {'name' : row['product_name'], 'amount' : _amount, 'price': row['price']}}
-        # all_total_price = 0
+        all_total_price = 0
         all_total_amount = 0
 
         session.modified = True
@@ -178,34 +178,52 @@ def delete_product(product_id):
         return redirect(url_for('shoppingCart'))
     except Exception as e:
         print(e)
-              
-# @app.route("/buy" ,methods=['POST'])
-# def buy():
-#     print("url Success")
-#     # Connect to the SQLite3 DB and create a cursor
-#     con = sqlite3.connect("database.db")
-#     cursor = con.cursor()
 
-#     #shopping cart裡加user_id, locate_id!!!!!!!!!!!!!!
-    
-#     for (product_id, user_id), item in 'cart_item'.items():
-#         amount = item['amount'] #如果要記的是總數就要在shopping cart裡加totaol_amount
-#         price = item['price']
-        
-#         #check是否已經出現在table裡
-#         cursor.execute('SELECT * FROM Orders WHERE user_id=? and product_id=?', (user_id, product_id))
-#         existing_order=cursor.fetchone()
-        
-#         if existing_order:
-#             #update已經有的record
-#             total_amount=existing_order[4]+amount
-#             cursor.execute('UPDATE Orders SET amount=? WHERE user_id=? and product_id=?',(total_amount, user_id, product_id))
+@app.route("/buy" ,methods=['POST'])
+def buy():
+    print("url Success")
+    # Connect to the SQLite3 DB and create a cursor
+    con = sqlite3.connect("database.db")
+    cursor = con.cursor()
 
-#         else:
-#             # Insert into the order table 
-#             cursor.execute('INSERT INTO Orders ( user_id,product_id, price, locate_id,amount) VALUES ( ?, ?, ?, ?, ?)',
-#                            ( user_id ,product_id, price, amount))
-    
-#     # Commit the changes and close the connection
-#     con.commit()
-#     con.close()
+    #shopping cart裡加user_id, locate_id!!!!!!!!!!!!!!
+    email = session['email']
+    cursor.execute('SELECT * FROM User WHERE email=?', (email,))
+    user_id=cursor.fetchone()
+    print("user id = ", user_id[0])
+    for product_id in session['cart_item'].items():
+        # print(session)
+        print("product_id = ",product_id[0])
+        amount = int(session['cart_item'][product_id[0]].get('amount'))
+        price = int(session['cart_item'][product_id[0]].get('price'))
+
+        U_id = int(user_id[0])
+        P_id = int(product_id[0])
+
+        #check是否已經出現在table裡
+        cursor.execute('SELECT * FROM Orders WHERE user_id=? and product_id=?', (U_id, P_id))
+        existing_order=cursor.fetchone()
+
+        if existing_order:
+            #update已經有的record
+            total_amount=existing_order[4]+amount
+            cursor.execute('UPDATE Orders SET amount=? WHERE user_id=? and product_id=?',(total_amount, U_id, P_id))
+
+        else:
+            # Insert into the order table
+            cursor.execute('INSERT INTO Orders ( user_id, product_id, price, locate_id, amount) VALUES ( ?, ?, ?, ?, ?)',
+                           ( U_id ,P_id, price, 1, amount))
+
+    # Commit the changes and close the connection
+    con.commit()
+    con.close()
+    session.clear()
+
+    # response = make_response('Buy successful')
+    # return response
+    return redirect(url_for('shoppingCart'))
+
+#按shopping回到shopping.html編輯
+@app.route("/Shopping")
+def shopping():
+     return render_template("Shopping.html")

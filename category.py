@@ -125,8 +125,16 @@ def add_product_to_cart():
 
         session['all_total_amount'] = all_total_amount
         # session['all_total_price'] = all_total_price
-
-        return redirect(url_for('food'))
+        
+        #四個種類return的頁面不一樣
+        if row['type_id'] == 1:
+            return redirect(url_for('food'))
+        elif row['type_id'] == 2:
+            return redirect(url_for('clothes'))
+        elif row['type_id'] == 3:
+            return redirect(url_for('applicances'))
+        else:
+            return redirect(url_for('others'))
     else:
         return 'Error while adding item to cart'
 

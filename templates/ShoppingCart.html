@@ -22,6 +22,7 @@
                             <tr>
                                 <th>Product_Name</th>
                                 <th>Price</th>
+                                <th>Product_id</th>
                                 <th>Amount</th>
                                 <th>Edit</th>
                             </tr>
@@ -31,36 +32,43 @@
                          {% if 'cart_item' in session %}
                          {% for key, value in session['cart_item'].items() %}
                          {% set product_name = session['cart_item'][key]['name'] %}
-                         {% set price = session['cart_item'][key]['price'] %} 
-                            <tr>
-                                <td class="col-sm-3 col-md-3 text-center"><strong>{{ product_name }} </strong></td>
-                                <td class="col-sm-3 col-md-3 text-center"><strong>{{ price }} </strong></td>
-                                <td calss="col-sm-3 col-md-3"> <input type = 'number' step = '1' min = '0' max = '20'/> </td>
-                                <td class="col-sm-3 col-md-3">
-                                    <!-- <form href="{{ url_for('.delete_product', code=session['cart_item'][key]['code']) }}" method = "POST">
-                                        <button type="submit" class="btn btn-danger"> Delete </button>        
-                                    </form> -->
-                                    <form action="/delete" method="POST">
-                                        <input type="hidden" name="product_id" value="{{ product_id }}">
-                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                    </form>
-                                </td>          
-                            </tr>
+                         {% set price = session['cart_item'][key]['price'] %}
+                         {% set product_id = session['cart_item'][key]['product_id'] %}
+                         <tr>
+                            <td class="col-sm-3 col-md-3 text-center"><strong>{{ product_name }} </strong></td>
+                            <td class="col-sm-3 col-md-3 text-center"><strong>{{ price }} </strong></td>
+                            <td class="col-sm-3 col-md-3 text-center"><strong>{{ product_id }} </strong></td>
+                            <td class="col-sm-3 col-md-3" style="text-align: center">
+                                <input type="email" class="form-control" value="{{ quantity }}">
+                            </td>
+                            <!-- <td calss="col-sm-3 col-md-3"> <input type = 'number' step = '1' min = '0' max = '20'/> </td> -->
+                            <td class="col-sm-3 col-md-3">                              
+                                <a href = "{{ url_for('delete_product', product_id = session['cart_item'][key]['product_id']) }}" button type="submit" class="btn btn-danger">
+                                   Delete
+                                </a>
+                                <!-- <form action="/delete" method="POST">
+                                    <input type="hidden" name="product_id" value="{{ product_id }}">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form> -->
+                                 
+                            </td>          
+                        </tr>
                         {% endfor %}
                         {% endif %}
-                            <tr>
-                                <td class="col-4">
-                                    <form action="{{ url_for('add_product_to_cart') }}">
-                                        <button type="submit" class="btn btn-info"> Buy </button>
-                                    </form>
-                                </td> 
-                                <td class="col-4">
-                                    <form action="{{ url_for('product') }}">
-                                        <button type="submit" class="btn btn-secondary"> 回到主畫面 </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        </tbody>
+                        <tr>
+                            <td class="col-4">
+                                <form action="/buy" method="POST">
+                                    <button type="submit" class="btn btn-info"> Add </button>
+                                </form>
+                            </td> 
+                            <td class="col-4">
+                                <form action="{{ url_for('product') }}">
+                                    <button type="submit" class="btn btn-secondary"> 回到主畫面 </button>
+                                </form>
+                            </td>
+                        </tr>
+                        
+                    </tbody>
                     </table>
                 </div>
             </div>

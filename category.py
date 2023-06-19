@@ -9,6 +9,12 @@ from app import app
 def product():
     return render_template("Shopping.html")
 
+# 按 concern，回傳 shoppingCart
+@app.route("/shoppingCart")
+def shoppingCart():
+    return render_template("ShoppingCart.html")
+
+
 # type_id = 1, food
 @app.route('/product/food')
 def food():
@@ -73,12 +79,6 @@ def others():
 
     return render_template("Others.html",rows=rows)
 
-
-# 按 concern，回傳 shoppingCart
-@app.route("/shoppingCart")
-def shoppingCart():
-    return render_template("ShoppingCart.html")
-
 # 將商品加入購物車
 @app.route('/add', methods=['POST'])
 def add_product_to_cart():
@@ -96,9 +96,9 @@ def add_product_to_cart():
 
         row = cursor.fetchone()
         con.close()
-        itemArray = {str(row['product_id']): {'name': row['product_name'],'amount': int(_amount),'price': float(row['price'])}}
+        itemArray = {str(row['product_id']): {'product_id': row['product_id'],'name': row['product_name'],'amount': int(_amount),'price': float(row['price'])}}
         # itemArray = { int(row['product_id']) : {'name' : row['product_name'], 'amount' : _amount, 'price': row['price']}}
-        all_total_price = 0
+        # all_total_price = 0
         all_total_amount = 0
 
         session.modified = True
@@ -125,7 +125,6 @@ def add_product_to_cart():
 
         session['all_total_amount'] = all_total_amount
         # session['all_total_price'] = all_total_price
-        
         #四個種類return的頁面不一樣
         if row['type_id'] == 1:
             return redirect(url_for('food'))
@@ -135,6 +134,7 @@ def add_product_to_cart():
             return redirect(url_for('applicances'))
         else:
             return redirect(url_for('others'))
+
     else:
         return 'Error while adding item to cart'
 
@@ -149,31 +149,63 @@ def array_merge( first_array , second_array ):
 
 
 # 刪除購物車的物品
-@app.route('/delete' , methods=['POST'])
-def delete_product():
+@app.route('/delete/<string:product_id>')
+def delete_product(product_id):
+    # print("Success the url")
     try:
         all_total_price = 0
         all_total_quantity = 0
         session.modified = True
 
-        product_id = request.form.get('product_id')
+        # product_id = request.form.get('product_id')
         for item in session['cart_item'].items():
             if item[0] == product_id:
                 session['cart_item'].pop(item[0], None)
                 if 'cart_item' in session:
                     for key, value in session['cart_item'].items():
                         individual_quantity = int(session['cart_item'][key]['amount'])
-                        individual_price = float(session['cart_item'][key]['total_price'])
+                        # individual_price = float(session['cart_item'][key]['total_price'])
                         all_total_quantity = all_total_quantity + individual_quantity
-                        all_total_price = all_total_price + individual_price
+                        # all_total_price = all_total_price + individual_price
                 break
 
         if all_total_quantity == 0:
             session.clear()
         else:
             session['all_total_quantity'] = all_total_quantity
-            session['all_total_price'] = all_total_price
-
-        return redirect(url_for('.shoppingCart'))
+            # session['all_total_price'] = all_total_price
+        # print("Success all")
+        return redirect(url_for('shoppingCart'))
     except Exception as e:
         print(e)
+              
+# @app.route("/buy" ,methods=['POST'])
+# def buy():
+#     print("url Success")
+#     # Connect to the SQLite3 DB and create a cursor
+#     con = sqlite3.connect("database.db")
+#     cursor = con.cursor()
+
+#     #shopping cart裡加user_id, locate_id!!!!!!!!!!!!!!
+    
+#     for (product_id, user_id), item in 'cart_item'.items():
+#         amount = item['amount'] #如果要記的是總數就要在shopping cart裡加totaol_amount
+#         price = item['price']
+        
+#         #check是否已經出現在table裡
+#         cursor.execute('SELECT * FROM Orders WHERE user_id=? and product_id=?', (user_id, product_id))
+#         existing_order=cursor.fetchone()
+        
+#         if existing_order:
+#             #update已經有的record
+#             total_amount=existing_order[4]+amount
+#             cursor.execute('UPDATE Orders SET amount=? WHERE user_id=? and product_id=?',(total_amount, user_id, product_id))
+
+#         else:
+#             # Insert into the order table 
+#             cursor.execute('INSERT INTO Orders ( user_id,product_id, price, locate_id,amount) VALUES ( ?, ?, ?, ?, ?)',
+#                            ( user_id ,product_id, price, amount))
+    
+#     # Commit the changes and close the connection
+#     con.commit()
+#     con.close()

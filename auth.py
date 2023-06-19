@@ -7,10 +7,15 @@ con = sqlite3.connect("database.db", check_same_thread=False)
 
 @app.route('/')
 def index():
-    return render_template("Home.html")
+    return render_template("Log_In.html")
 # @app.route('/login')
 # def login():
 #     return render_template('Log_In.html')
+
+
+@app.route('/home')
+def home():
+    return render_template("Home.html")
 
 
 @app.route('/profile')
@@ -39,7 +44,7 @@ def login():
         if data:
             session["email"] = data["email"]
             session["password"] = data["password"]
-            return redirect(url_for("profile"))
+            return redirect(url_for("home"))
         else:
             return "Username and Password Mismatch"
     return render_template("Log_In.html")

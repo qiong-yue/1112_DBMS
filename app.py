@@ -9,6 +9,7 @@ import category
 import buy
 import edit_profile
 import grouping
+
 app.secret_key = "secret"
 
 

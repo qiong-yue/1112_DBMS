@@ -41,7 +41,8 @@ def buy(cart_items):
     con.commit()
     con.close()
 
+
 #按shopping回到shopping.html編輯
-#@app.route("/Shopping")
-# def Shopping():
-#     return render_template("Shopping.html")
+@app.route("/Shopping")
+def shopping():
+     return render_template("Shopping.html")

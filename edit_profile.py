@@ -23,7 +23,7 @@ def member_profile():
             email = None 
         finally:
             con.close()
-            return render_template("Member_Profile.html") #改網址名
+    return render_template("Member_Profile.html") #改網址名
         
 #編輯的畫面(編輯頁)( like editrec )
 #會員可修改畫面會跑出修改成功的畫面

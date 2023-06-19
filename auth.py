@@ -59,6 +59,7 @@ def register():
             bdate = request.form['bdate']
             phone = request.form['phone']
             address = request.form['address']
+            IS_SELLER = request.form['is_seller']
 
             con.row_factory = sqlite3.Row
             cur = con.cursor()
@@ -74,10 +75,10 @@ def register():
                 cur = con.cursor()
                 cur.execute("""
                     INSERT INTO User (
-                        address, phone, email, Bdate, password)
+                        address, phone, email, Bdate, password , is_seller )
                     VALUES
-                        (?, ?, ?, ?, ?);
-                    """, (address, phone, email, bdate, password))
+                        (?, ?, ?, ?, ? , ? );
+                    """, (address, phone, email, bdate, password , IS_SELLER ))
                 con.commit()
                 print("success", file=sys.stderr)
         except Exception:

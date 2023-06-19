@@ -43,7 +43,7 @@ def clothes():
 
 # type_id = 3, appliance
 @app.route('/product/foapplianceod')
-def appliance():
+def applicances():
     # Connect to the SQLite3 DB
     con = sqlite3.connect("database.db")
     con.row_factory = sqlite3.Row
@@ -55,7 +55,7 @@ def appliance():
     rows = cur.fetchall()
     con.close()
 
-    return render_template("Appliance.html",rows=rows)
+    return render_template("Applicances.html",rows=rows)
 
 # type_id = 4, others
 @app.route('/product/others')
@@ -138,7 +138,6 @@ def array_merge( first_array , second_array ):
     elif isinstance( first_array , set ) and isinstance( second_array , set ):
         return first_array.union( second_array )
     return False
-
 
 
 # 刪除購物車的物品

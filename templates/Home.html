@@ -17,7 +17,6 @@
             text-align: center;
         }
         p a{
-            margin-right: 50px;
             width: 150px;
         }
     </style>
@@ -39,7 +38,7 @@
         {% if session["email"]%}
         <h2 class="bg-success p-2 text-dark bg-opacity-10 display-6">Welcome : <strong>{{session["email"]}}</strong></h2><br>
         <p style="text-align: center">
-            <a href="{{url_for('grouping')}}" class="btn btn-info">Grouping</a>
+            <a href="{{url_for('grouping')}}" class="btn btn-info" style="margin-right: 50px;">Grouping</a>
             <a href="{{url_for('product')}}" class="btn btn-info">Shopping</a>
         </p>
         {% endif %}

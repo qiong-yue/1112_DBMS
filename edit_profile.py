@@ -13,7 +13,7 @@ def member_profile():
     if request.method == 'POST' :
         try:
             email = request.form['email']   #找到要修改的email
-            con = sqlite3.connect('DataBase.db')
+            con = sqlite3.connect('database.db')
             #con.row_factory = sqlite3.Row
             cur = con.cursor()
             cur.execute("select rowid , * FROM user WHERE rowid = " +email )  #找到那人的資料
@@ -23,7 +23,7 @@ def member_profile():
             email = None 
         finally:
             con.close()
-            return render_template("member_profile.html") #改網址名
+            return render_template("Member_Profile.html") #改網址名
         
 #編輯的畫面(編輯頁)( like editrec )
 #會員可修改畫面會跑出修改成功的畫面
@@ -37,7 +37,7 @@ def edit():
             Bdate = request.form['bdate']
             phone = request.form['phone']
             addr = request.form['address']
-            with sqlite3.connect('Database.db') as con :
+            with sqlite3.connect('database.db') as con :
                 cur = con.cursor()    #以下是執行修改的動作
                 cur.execute("UPDATE user SET  address='" +addr+"' , phone='"+phone+"' , Bdate='"+Bdate+"' , password='"+pw+"'  WhERE email = "+email )
                 con.commit()

@@ -15,7 +15,7 @@ def grouping():
             price = request.form['price'] #價錢
             origin = request.form['origin'] #產地 
             seller_email = request.form['email'] #會員信箱
-            with sqlite3.connect('Database.db') as con :
+            with sqlite3.connect('database.db') as con :
                 cur = con.cursor()
                 cur.execute(  #加入新商品資訊 
                     """

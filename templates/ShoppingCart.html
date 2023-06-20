@@ -38,7 +38,6 @@
                 <th>#</th>
             </tr>
         </thead>
-            
         <tbody>
             {% if 'cart_item' in session %}
             {% for key, value in session['cart_item'].items() %}
@@ -69,19 +68,29 @@
         </tbody>
     </table>
     <br><br>
-    <div class="row text-center">
-        <div class="col-3"></div>
-        <div class="col-1"></div>
-        <div class="col-2">
-            <form action="/buy" method="POST">
+    {% if 'cart_item' in session %}
+    <form action="/buy" method="POST">
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-2">Address: <input type="text" class="form-control" name="address"></div>
+            <div class="col-2">Cellphone: <input type="tel" class="form-control" name="phone"></div>
+            <div class="col-4"></div>
+        </div>
+        <br><br>
+    {% endif %}
+
+        <div class="row text-center">
+            <div class="col-3"></div>
+            <div class="col-1"></div>
+            <div class="col-2">
                 <button type="submit" class="btn btn-info"> Buy </button>
-            </form>
+            </div>
+            <div class="col-2">
+                <a href="{{url_for('product')}}" class="btn btn-secondary">回到主畫面</a>
+            </div>
+            <div class="col-4"></div>    
         </div>
-        <div class="col-2">
-            <a href="{{url_for('product')}}" class="btn btn-secondary">回到主畫面</a>
-        </div>
-        <div class="col-3"></div>    
-    </div>
+    </form>
 </body>
 </html>
 

@@ -181,7 +181,6 @@ def delete_product(product_id):
 
 @app.route("/buy" ,methods=['POST'])
 def buy():
-    print("url Success")
     # Connect to the SQLite3 DB and create a cursor
     con = sqlite3.connect("database.db")
     cursor = con.cursor()
@@ -190,16 +189,11 @@ def buy():
     email = session['email']
     cursor.execute('SELECT * FROM User WHERE email=?', (email,))
     user_id=cursor.fetchone()
-    print("user id = ", user_id[0])
     
     #拿到locate資料存入locate table
     if request.method == "POST":
-        print("POST success")
         address = request.form['address']
-        print("address Success")
         phone = request.form['phone']
-        print("address Success")
-        print("address, phone",address, phone)
         # con.row_factory = sqlite3.Row
         
         cur = con.cursor()
@@ -235,7 +229,8 @@ def buy():
     # Commit the changes and close the connection
     con.commit()
     con.close()
-    session.clear()
+    session.pop('cart_item', None) #
+    # session['cart_item'].clear()
 
     # response = make_response('Buy successful')
     # return response

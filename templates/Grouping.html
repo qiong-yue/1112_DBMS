@@ -30,7 +30,13 @@
                 <h3><strong>請輸入您的商品資料：</strong></h3><br>
                 <p>商品名稱：<input type="text" name="name" /></p>
 
-                <p>商品種類：<input type="text" name="variety" /></p>
+                <p>商品種類：<label for="number-select"></label>
+                    <select id="number-select" name="variety">
+                        <option value="1">Food</option>
+                        <option value="2">Clothes</option>
+                        <option value="3">Appliances</option>
+                        <option value="4">Others</option>
+                    </select>
 
                 <p>商品來源：<input type="text" name="origin" /></p>
 

@@ -15,20 +15,25 @@ def member_profile():
 #輸入修改的資料
 @app.route( '/edit' , methods=['POST' , 'GET'] )
 def edit():
-    print( "enter")
     if request.method == 'POST' :
-        email = session.get('email')
-        print(email)
-        pw = request.form['password']  
-        Bdate = request.form['bdate']
-        phone = request.form['phone']
-        addr = request.form['address']
-        con.row_factory = sqlite3.Row
-        cur = con.cursor()    #以下是執行修改的動作
-        cur.execute( "UPDATE User SET address=? , phone=? , Bdate=? , password=? , WHERE email=? " ,( addr , phone , Bdate , pw , email ) )
-        con.commit()
-        flash('Edit Success!')
-        return redirect(url_for("index"))
+        try:
+            email = session.get('email')
+            print(email)
+            pw = request.form['password']  
+            Bdate = request.form['bdate']
+            phone = request.form['phone']
+            addr = request.form['address']
+            #以下是執行修改的動作
+            with sqlite3.connect('database.db') as con:
+                cur = con.cursor()
+                cur.execute("UPDATE User SET address='"+addr+"', phone='"+phone+"', Bdate='"+Bdate+"', password='"+pw+"' WHERE email='"+email+"'")
+                con.commit()
+            flash('Edit Success!')
+            return redirect(url_for("index"))
+        except:
+            con.rollback()
+        finally:
+            con.close()
     return render_template("Log_In.html") #改網址名
         
 

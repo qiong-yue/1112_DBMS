@@ -186,14 +186,33 @@ def buy():
     con = sqlite3.connect("database.db")
     cursor = con.cursor()
 
-    #shopping cart裡加user_id, locate_id!!!!!!!!!!!!!!
+    #拿到會員email和user_id(因為要存入order table中)
     email = session['email']
     cursor.execute('SELECT * FROM User WHERE email=?', (email,))
     user_id=cursor.fetchone()
     print("user id = ", user_id[0])
+    
+    #拿到locate資料存入locate table
+    if request.method == "POST":
+        print("POST success")
+        address = request.form['address']
+        print("address Success")
+        phone = request.form['phone']
+        print("address Success")
+        print("address, phone",address, phone)
+        # con.row_factory = sqlite3.Row
+        
+        cur = con.cursor()
+        cur.execute('INSERT INTO Locate (address, phone) VALUES (?, ? );', (address, phone))
+        con.commit()
+        cur.execute('SELECT Locate_id FROM Locate Where address = ?', (address,))
+        locate_id = cur.fetchone()[0]
+        print("locate id = ", locate_id)
+    
+    #遍歷session['cart_item"]中的每個product_id
     for product_id in session['cart_item'].items():
         # print(session)
-        print("product_id = ",product_id[0])
+        # print("product_id = ",product_id[0])
         amount = int(session['cart_item'][product_id[0]].get('amount'))
         price = int(session['cart_item'][product_id[0]].get('price'))
 
@@ -211,8 +230,7 @@ def buy():
 
         else:
             # Insert into the order table
-            cursor.execute('INSERT INTO Orders ( user_id, product_id, price, locate_id, amount) VALUES ( ?, ?, ?, ?, ?)',
-                           ( U_id ,P_id, price, 1, amount))
+            cursor.execute('INSERT INTO Orders ( user_id, product_id, price, locate_id, amount) VALUES ( ?, ?, ?, ?, ?)',( U_id ,P_id, price, locate_id, amount))
 
     # Commit the changes and close the connection
     con.commit()

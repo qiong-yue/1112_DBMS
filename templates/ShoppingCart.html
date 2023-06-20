@@ -44,13 +44,16 @@
             {% set product_name = session['cart_item'][key]['name'] %}
             {% set price = session['cart_item'][key]['price'] %}
             {% set product_id = session['cart_item'][key]['product_id'] %}
+            {% set amount = session['cart_item'][key]['amount'] %}
             <tr>
                 <td class="col-2"><strong>{{ product_name }} </strong></td>
                 <td class="col-2"><strong>{{ price }} </strong></td>
                 <td class="col-2"><strong>{{ product_id }} </strong></td>
+                <form action="/buy" method="POST">
                 <td class="col-2" style="text-align: center">
-                    <input type="email" class="form-control" value="{{ quantity }}">
+                    <input type="number" class="form-control"  value="{{ amount }}">
                 </td>
+                </form>
                 <!-- <td calss="col-sm-3 col-md-3"> <input type = 'number' step = '1' min = '0' max = '20'/> </td> -->
                 <td class="col-2">                              
                     <a href = "{{ url_for('delete_product', product_id = session['cart_item'][key]['product_id']) }}" button type="submit" class="btn btn-danger">

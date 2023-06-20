@@ -15,7 +15,7 @@ def member_profile():
 #輸入修改的資料
 @app.route( '/edit' , methods=['POST' , 'GET'] )
 def edit():
-    print( "enter")
+    #print( "enter")
     if request.method == 'POST' :
         email = session.get('email')
         print(email)
@@ -23,15 +23,16 @@ def edit():
         Bdate = request.form['bdate']
         phone = request.form['phone']
         addr = request.form['address']
-        con.row_factory = sqlite3.Row
+        #con.row_factory = sqlite3.Row
         cur = con.cursor()    #以下是執行修改的動作
-        cur.execute( "UPDATE User SET address=? , phone=? , Bdate=? , password=? , WHERE email=? " ,( addr , phone , Bdate , pw , email ) )
+        #print("start")
+        cur.execute( "UPDATE User SET address= '"+addr+"' , phone= '"+phone+"' , Bdate='"+Bdate+"' , password='"+pw+"' WHERE email='"+email+"' "  )
+        #print("end")
         con.commit()
         flash('Edit Success!')
         return redirect(url_for("index"))
     return render_template("Log_In.html") #改網址名
-        
-
+ 
       
 @app.route("/delete_member", methods=["POST", "GET"])
 def delete_member(): 

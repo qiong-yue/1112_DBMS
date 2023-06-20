@@ -26,7 +26,8 @@ def grouping():
                     ( ?, ?, ?, ?, ?, ? ) 
                 """, ( seller_email , nm , t_id , amount , price , origin )) 
             con.commit()
-                # flash('Grouping  Success!') #利用 flash 顯示 開團成功 
+                # flash('Grouping  Success!') #利用 flash 顯示 開團成功
+            return redirect(url_for("home"))
         else:
             print( "nothing ")
             return "ERROR!! 可能原因: (1) 你並非賣家 (2) email 輸入錯誤  Try again ! "  
